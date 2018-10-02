@@ -1,0 +1,70 @@
+# # General configuration
+#
+# Port to listen on
+# port = "$PORT"
+#
+# Key used to sign tokens used to verify requests.
+# secret_key = ""
+#
+# Sentry DSN key used to report errors
+# sentry_dsn = ""
+#
+# StatsD configuration
+# [stats]
+#       host = "localhost" # host send stats to
+#       port = 8125 # UDP port to send stats to
+
+# # Store definition
+#
+# Each store is defined in form
+#
+#       [stores.<path>]
+#       type = "S3" or "Local" # case sensitive
+#
+# Each store can also be provided with additional options in form
+#
+#       [stores.<path>.options]
+#       bucket = "upload"
+#
+# There is also possibility to define store and cache separately via
+#
+#       [stores.<path>.store]
+#       type = "S3"
+#               [stores.<path>.store.config]
+#               bucket = "uploads"
+#       [stores.<path>.cache]
+#       type = "Local"
+#               [stores.<path>.cache.config]
+#               dir = "/tmp/cache"
+
+# # Environment variable expansion
+#
+# Each string value can be expanded using environment variable.  Given string
+# needs to be in form `$env_name`, ex.:
+#
+#       secret_key = "$SECRET_KEY"
+#
+# There is no way to cast given variable to different type
+
+# # Store types
+#
+# ## S3
+#
+# Available options:
+# `bucket` (required) - bucket name for given storage
+# `region` (required) - AWS storage region
+# `host` - host to S3-compatible service (without scheme or port), ex.:
+#          'localhost'.  Defaults to AWS
+# `scheme` - scheme to use, MUST end with '://'.  Defaults to 'https://'
+# `port`  - communication port.  Defaults to whatever is default port for
+#           `scheme`
+# `virtual_host` - whether use virtual hosts for AWS or not, boolean.
+
+# [stores.upload]
+# type = "S3"
+#     [stores.upload.options]
+#     bucket = "upload"
+#     host = "$S3_HOST"
+#     scheme = "$S3_SCHEME"
+#     port = "$S3_PORT"
+#     region = "eu-west-1"

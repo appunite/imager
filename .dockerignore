@@ -1,0 +1,11 @@
+/_build
+/deps
+/tests
+/.mc
+/.elixir_ls
+/data
+/cover
+/.DS_Store
+/.envrc
+/.formatter.exs
+/tags
