@@ -4,8 +4,8 @@ defmodule Imager.Config.PortNormalizationTest do
 
   alias Imager.Config.PortNormalization, as: Subject
 
-  defp non_positive_integer() do
-    gen(all value <- one_of([positive_integer(), constant(0)]), do: -value)
+  defp non_positive_integer do
+    gen all value <- one_of([positive_integer(), constant(0)]), do: -value
   end
 
   defp assert_fail(value) do

@@ -13,7 +13,8 @@ defmodule Imager.Config.PortNormalization do
     end
   rescue
     ArgumentError ->
-      raise "Expected port to be positive integer, got: #{inspect(value)}"
+      reraise "Expected port to be positive integer, got: #{inspect(value)}",
+              __STACKTRACE__
   end
 
   def transform(:port, value) when value > 0, do: value

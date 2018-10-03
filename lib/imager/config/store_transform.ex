@@ -29,20 +29,20 @@ defmodule Imager.Config.StoreTransform do
       else
         _ ->
           raise """
-                Invalid store `#{path}` definition, store needs to be defined in form
+          Invalid store `#{path}` definition, store needs to be defined in form
 
-                  [stores.path]
-                  type = {#{list()}
+            [stores.path]
+            type = {#{list()}
 
-                or
+          or
 
-                  [stores.path.store]
-                  type = {#{list()}
-                  [stores.path.cache]
-                  type = {#{list()}}
+            [stores.path.store]
+            type = {#{list()}
+            [stores.path.cache]
+            type = {#{list()}}
 
-                Got #{inspect entries}
-                """
+          Got #{inspect(entries)}
+          """
       end
     end)
   end

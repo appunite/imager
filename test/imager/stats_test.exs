@@ -17,10 +17,11 @@ defmodule Imager.StatsTest do
       generated = Imager.Stats.tags(tags)
 
       assert "app:imager" in generated
+
       assert Enum.find(generated, fn
-        "version:" <> _ -> true
-        _ -> false
-      end)
+               "version:" <> _ -> true
+               _ -> false
+             end)
     end
   end
 end
