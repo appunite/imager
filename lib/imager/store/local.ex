@@ -10,11 +10,13 @@ defmodule Imager.Store.Local do
   def retrieve(path, opts) do
     dir = Keyword.get(opts, :dir, ".")
     full_path = Path.join(dir, path)
+
     extname =
       case Path.extname(path) do
         "." <> extname -> extname
         extname -> extname
       end
+
     mime = MIME.type(extname)
 
     with {:ok, %File.Stat{size: size}} <- File.stat(full_path) do

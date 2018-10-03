@@ -8,7 +8,11 @@ defmodule Imager.Application do
       ImagerWeb.Endpoint
     ]
 
-    Application.put_env(:sentry, :dsn, Application.get_env(:imager, :sentry_dsn))
+    Application.put_env(
+      :sentry,
+      :dsn,
+      Application.get_env(:imager, :sentry_dsn)
+    )
 
     Imager.Stats.start()
     {:ok, _} = Logger.add_backend(Sentry.LoggerBackend)

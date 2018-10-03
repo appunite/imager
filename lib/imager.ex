@@ -9,11 +9,9 @@ defmodule Imager do
 
   require Logger
 
-  alias Imager.Tool
+  alias Imager.Stats
   alias Imager.Store
-  alias Imager.Stats
-
-  alias Imager.Stats
+  alias Imager.Tool
 
   @type size :: non_neg_integer() | :unknown
   @type mime :: binary()

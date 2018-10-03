@@ -3,13 +3,14 @@ defmodule Imager.Tool do
   Describe tool used by the current instance to convert images
   """
 
-  @type command :: {:thumbnail, binary()}
-  | {:strip, any()}
-  | {:gravity, binary()}
-  | {:extent, binary()}
-  | {:flatten, any()}
-  | {:background, any()}
-  | {:format, binary()}
+  @type command ::
+          {:thumbnail, binary()}
+          | {:strip, any()}
+          | {:gravity, binary()}
+          | {:extent, binary()}
+          | {:flatten, any()}
+          | {:background, any()}
+          | {:format, binary()}
   @type commands :: [command]
 
   require Logger
@@ -17,7 +18,8 @@ defmodule Imager.Tool do
   defmodule UnknownOption do
     defexception [:option, :value, plug_status: 422]
 
-    def exception({option, value}), do: %__MODULE__{option: option, value: value}
+    def exception({option, value}),
+      do: %__MODULE__{option: option, value: value}
 
     def message(%__MODULE__{option: option, value: value}) do
       "Unknown command #{option} with value #{value}"
@@ -72,5 +74,5 @@ defmodule Imager.Tool do
   defp string({"gravity", orientation}), do: {:gravity, orientation}
   defp string({"strip", _}), do: {:strip, true}
   defp string({"thumbnail", size}), do: {:thumbnail, size}
-  defp string(option), do: raise UnknownOption, option
+  defp string(option), do: raise(UnknownOption, option)
 end
