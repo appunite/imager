@@ -1,4 +1,5 @@
 # Imager
+[![CircleCI](https://circleci.com/gh/appunite/imager.svg?style=svg)](https://circleci.com/gh/appunite/imager)
 
 Image processing proxy server written in Elixir.
 

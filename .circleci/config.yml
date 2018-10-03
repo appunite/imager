@@ -3,7 +3,62 @@
 # Check https://circleci.com/docs/2.0/language-elixir/ for more details
 version: 2
 jobs:
-  build:
+  test:
+    docker:
+      # specify the version here
+      - image: appunite/elixir-ci:1.7.1
+
+    working_directory: ~/repo
+    steps:
+      - run: apt-get update && apt-get install -y --no-install-recommends imagemagick ghostscript
+      - checkout
+
+      - restore_cache:
+          keys:
+            - deps-v1-{{ .Branch }}-{{ .Revision }}
+            - deps-v1-{{ .Branch }}-
+            - deps-v1-
+      - run: mix do deps.get, deps.compile
+      - save_cache:
+          key: deps-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "deps"
+            - "_build"
+
+      - run: mkdir -p reports/exunit
+      - run: mix test --exclude exec:true
+      - store_test_results:
+          path: reports
+  dialyzer:
+    docker:
+      - image: appunite/elixir-ci:1.7.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - deps-v1-{{ .Branch }}-{{ .Revision }}
+            - deps-v1-{{ .Branch }}-
+            - deps-v1-
+      - run: mix do deps.get, deps.compile
+      - save_cache:
+          key: deps-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "deps"
+            - "_build"
+
+      - restore_cache:
+          keys:
+            - dialyzer-v1-{{ checksum "mix.lock" }}
+            - dialyzer-v1
+      - run: mix dialyzer --plt
+      - save_cache:
+          key: dialyzer-v1-{{ checksum "mix.lock" }}
+          paths:
+            - "_build"
+      - run: mix dialyzer --halt-exit-status
+  format:
     docker:
       # specify the version here
       - image: appunite/elixir-ci:1.7.1
@@ -12,6 +67,23 @@ jobs:
     steps:
       - checkout
 
-      # specify any bash command here prefixed with `run: `
-      - run: mix deps.get
-      - run: mix test
+      - restore_cache:
+          keys:
+            - deps-v1-{{ .Branch }}-{{ .Revision }}
+            - deps-v1-{{ .Branch }}-
+            - deps-v1-
+      - run: mix do deps.get, deps.compile
+      - save_cache:
+          key: deps-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "deps"
+            - "_build"
+
+      - run: mix format --check-formatted
+workflows:
+  version: 2
+  testing:
+    jobs:
+      - test
+      - dialyzer
+      - format

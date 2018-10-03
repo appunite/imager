@@ -17,6 +17,7 @@ defmodule Imager.Mixfile do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      dialyzer: [plt_add_apps: [:vmstats]],
       description: @description
     ]
   end
@@ -57,7 +58,8 @@ defmodule Imager.Mixfile do
       {:jose, "~> 1.8"},
       {:toml, "~> 0.3"},
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false}
+      {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
+      {:junit_formatter, "~> 2.2", only: [:test]}
     ]
   end
 
