@@ -13,11 +13,10 @@ defmodule Imager.Stats do
         host: Map.fetch!(config, :host),
         port: Map.fetch!(config, :port)
       )
-
-      connect()
-
-      {:ok, _} = Application.ensure_all_started(:vmstats, :permanent)
     end
+
+    connect()
+    {:ok, _} = Application.ensure_all_started(:vmstats, :permanent)
 
     :ok
   end
