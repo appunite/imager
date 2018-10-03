@@ -18,6 +18,13 @@ defmodule Imager.Mixfile do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: [plt_add_apps: [:vmstats]],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.circle": :test,
+        "coveralls.html": :test
+      ],
       description: @description
     ]
   end
@@ -57,9 +64,10 @@ defmodule Imager.Mixfile do
       {:porcelain, "~> 2.0.3"},
       {:jose, "~> 1.8"},
       {:toml, "~> 0.3"},
-      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
-      {:junit_formatter, "~> 2.2", only: [:test]}
+      {:junit_formatter, "~> 2.2", only: [:test]},
+      {:excoveralls, "~> 0.10", only: [:test]}
     ]
   end
 

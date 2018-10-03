@@ -26,7 +26,7 @@ jobs:
             - "_build"
 
       - run: mkdir -p reports/exunit
-      - run: mix test --exclude exec:true
+      - run: mix coveralls.circle --exclude exec:true
       - store_test_results:
           path: reports
   dialyzer:

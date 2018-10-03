@@ -1,5 +1,7 @@
 # Imager
+
 [![CircleCI](https://circleci.com/gh/appunite/imager.svg?style=svg)](https://circleci.com/gh/appunite/imager)
+[![Coverage Status](https://coveralls.io/repos/github/appunite/imager/badge.svg?branch=master)](https://coveralls.io/github/appunite/imager?branch=master)
 
 Image processing proxy server written in Elixir.
 
