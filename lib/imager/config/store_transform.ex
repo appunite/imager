@@ -54,7 +54,7 @@ defmodule Imager.Config.StoreTransform do
   defp get_cache(%{cache: values}), do: parse(values)
   defp get_cache(values), do: parse(values)
 
-  defp parse(%{type: type} = values) when type in ~w(S3 Local) do
+  defp parse(%{type: type} = values) when type in ~w(S3 Local Blackhole) do
     module = Module.safe_concat(Imager.Store, type)
     opts = Keyword.new(Map.get(values, :options, []))
 
