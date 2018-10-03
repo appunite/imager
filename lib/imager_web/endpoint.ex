@@ -28,7 +28,7 @@ defmodule ImagerWeb.Endpoint do
   """
   def init(_key, config) do
     port =
-      Application.get_env(:imager, :port) || System.get_env("PORT") ||
+      System.get_env("PORT") || Application.get_env(:imager, :port) ||
         raise "expected the PORT environment variable to be set"
 
     {:ok, Keyword.put(config, :http, [:inet6, port: port])}

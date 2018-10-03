@@ -1,6 +1,7 @@
 {
   "skip_files": [
-    "test/support"
+    "test/support",
+    "lib/imager_web/instrumenter.ex"
   ],
 
   "coverage_options": {
