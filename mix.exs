@@ -68,7 +68,8 @@ defmodule Imager.Mixfile do
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
       {:junit_formatter, "~> 2.2", only: [:test]},
       {:excoveralls, "~> 0.10", only: [:test]},
-      {:stream_data, "~> 0.1", only: [:test]}
+      {:stream_data, "~> 0.1", only: [:test]},
+      {:temp, "~> 0.4", only: [:test]}
     ]
   end
 

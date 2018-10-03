@@ -8,6 +8,7 @@ defmodule Imager.Config.StoreTransform do
   require Logger
 
   @reserved ~w[health]
+  @types ~w[S3 Local Blackhole]
 
   def transform(:stores, entries) do
     Map.new(entries, fn {path, values} ->
@@ -26,26 +27,24 @@ defmodule Imager.Config.StoreTransform do
            cache: cache
          }}
       else
-        _ -> throw({:invalid, path, entries})
+        _ ->
+          raise """
+          Invalid store `#{path}` definition, store needs to be defined in form
+
+            [stores.path]
+            type = {#{list()}
+
+          or
+
+            [stores.path.store]
+            type = {#{list()}
+            [stores.path.cache]
+            type = {#{list()}}
+
+          Got #{inspect(entries)}
+          """
       end
     end)
-  catch
-    {:invalid, path, entries} ->
-      raise """
-      Invalid store `#{path}` definition, store needs to be defined in form
-
-        [stores.path]
-        type = {"S3" or "Local"}
-
-      or
-
-        [stores.path.store]
-        type = {"S3" or "Local"}
-        [stores.path.cache]
-        type = {"S3" or "Local"}
-
-      Got #{inspect(entries)}
-      """
   end
 
   def transform(_k, value), do: value
@@ -56,7 +55,7 @@ defmodule Imager.Config.StoreTransform do
   defp get_cache(%{cache: values}), do: parse(values)
   defp get_cache(values), do: parse(values)
 
-  defp parse(%{type: type} = values) when type in ~w(S3 Local Blackhole) do
+  defp parse(%{type: type} = values) when type in @types do
     module = Module.safe_concat(Imager.Store, type)
     opts = Keyword.new(Map.get(values, :options, []))
 
@@ -64,4 +63,10 @@ defmodule Imager.Config.StoreTransform do
   end
 
   defp parse(values), do: {:error, values}
+
+  defp list do
+    [last | rest] = @types
+
+    Enum.join(rest, ", ") <> " or " <> last
+  end
 end
