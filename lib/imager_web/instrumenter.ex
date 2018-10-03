@@ -2,7 +2,8 @@ defmodule ImagerWeb.Instrumenter do
   @moduledoc """
   Instrument application.
 
-  This module gathers statistics about running application and sends them to StatsD compatible server.
+  This module gathers statistics about running application and sends them
+  to StatsD compatible server.
   """
 
   def phoenix_controller_call(:start, _, %{conn: conn}) do
@@ -24,6 +25,6 @@ defmodule ImagerWeb.Instrumenter do
   defp module_name("Elixir." <> name), do: name
   defp module_name(name) when is_bitstring(name), do: name
 
-  defp module_name(name) when is_atom(name), do: module_name(Atom.to_string(name))
+  defp module_name(name) when is_atom(name),
+    do: module_name(Atom.to_string(name))
 end
-

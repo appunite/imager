@@ -12,17 +12,19 @@ defmodule Imager.Config.StoreTransform do
   def transform(:stores, entries) do
     Map.new(entries, fn {path, values} ->
       with {:ok, store} <- get_store(values),
-           {:ok, cache} <- get_cache(values)
-      do
+           {:ok, cache} <- get_cache(values) do
         path = to_string(path)
 
-        if path in @reserved, do: raise "'#{path}' is reserved name"
-        if String.contains?(path, "/"), do: raise "'#{path}' cannot contain '/'"
+        if path in @reserved, do: raise("'#{path}' is reserved name")
 
-        {path, %{
-          store: store,
-          cache: cache
-        }}
+        if String.contains?(path, "/"),
+          do: raise("'#{path}' cannot contain '/'")
+
+        {path,
+         %{
+           store: store,
+           cache: cache
+         }}
       else
         _ -> throw({:invalid, path, entries})
       end
@@ -30,20 +32,20 @@ defmodule Imager.Config.StoreTransform do
   catch
     {:invalid, path, entries} ->
       raise """
-            Invalid store `#{path}` definition, store needs to be defined in form
+      Invalid store `#{path}` definition, store needs to be defined in form
 
-              [stores.path]
-              type = {"S3" or "Local"}
+        [stores.path]
+        type = {"S3" or "Local"}
 
-            or
+      or
 
-              [stores.path.store]
-              type = {"S3" or "Local"}
-              [stores.path.cache]
-              type = {"S3" or "Local"}
+        [stores.path.store]
+        type = {"S3" or "Local"}
+        [stores.path.cache]
+        type = {"S3" or "Local"}
 
-            Got #{inspect entries}
-            """
+      Got #{inspect(entries)}
+      """
   end
 
   def transform(_k, value), do: value

@@ -9,6 +9,7 @@ defmodule Imager.Store.Dummy do
         end
 
         result
+
       :error ->
         if ref = Keyword.get(opts, :ref) do
           send(self(), {:missed, ref, path})

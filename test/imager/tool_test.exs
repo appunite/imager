@@ -11,14 +11,15 @@ defmodule Imager.ToolTest do
       # Defaults to PNG
       assert {"image/png", _} = Tool.result("/file.jpg", [])
 
-      assert {"image/jpeg", _} = Tool.result("/file.jpg", [format: "jpg"])
+      assert {"image/jpeg", _} = Tool.result("/file.jpg", format: "jpg")
     end
 
     test "creates joined path with commands" do
-      assert {_, "/file_strip_thumbnail-190x190.png"} = Tool.result("/file.png", [
-        strip: true,
-        thumbnail: "190x190"
-      ])
+      assert {_, "/file_strip_thumbnail-190x190.png"} =
+               Tool.result("/file.png",
+                 strip: true,
+                 thumbnail: "190x190"
+               )
     end
 
     test "creates proper path for each command" do

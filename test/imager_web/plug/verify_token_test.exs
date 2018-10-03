@@ -23,7 +23,7 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
     end
 
     test "has assigned empty actions", %{opts: opts} do
-      conn = 
+      conn =
         "/image.jpg"
         |> get()
         |> VerifyToken.call(opts)
@@ -69,7 +69,8 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
 
   describe "passthrough with allowance and token" do
     setup do
-      opts = VerifyToken.init(jwk: jwk("example"), allow_unsigned_passthrough: true)
+      opts =
+        VerifyToken.init(jwk: jwk("example"), allow_unsigned_passthrough: true)
 
       {:ok, opts: opts}
     end
@@ -123,6 +124,7 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
 
     test "disallows connections with invalid path", %{key: key, opts: opts} do
       token = sign(key, "/invalid.jpg", "strip=true")
+
       conn =
         "/image.jpg"
         |> get(strip: true, token: token)
@@ -134,6 +136,7 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
 
     test "disallows connections with invalid actions", %{key: key, opts: opts} do
       token = sign(key, "/image.jpg", "thumbnail=120x120")
+
       conn =
         "/image.jpg"
         |> get(strip: true, token: token)
@@ -145,6 +148,7 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
 
     test "allows connections with valid token", %{key: key, opts: opts} do
       token = sign(key, "/image.jpg", "strip=true")
+
       conn =
         "/image.jpg"
         |> get(strip: true, token: token)
@@ -165,6 +169,7 @@ defmodule ImagerWeb.Plug.VerifyTokenTest do
 
     test "fails with incorrect key", %{opts: opts} do
       token = sign(jwk("invalid"), "/image.jpg", "strip=true")
+
       conn =
         "/image.jpg"
         |> get(strip: true, token: token)

@@ -1,7 +1,7 @@
 defmodule ImagerWeb.Controllers.Health do
   use Phoenix.Controller, namespace: ImagerWeb
 
-  @description Mix.Project.config[:description]
+  @description Mix.Project.config()[:description]
 
   def get(conn, _params) do
     json(conn, %{

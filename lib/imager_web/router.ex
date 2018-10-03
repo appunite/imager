@@ -6,14 +6,14 @@ defmodule ImagerWeb.Router do
   import Phoenix.Controller
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", ImagerWeb.Controllers do
-    pipe_through :api
+    pipe_through(:api)
 
-    get "/health", Health, :get
+    get("/health", Health, :get)
 
-    get "/:store/*path", Image, :get
+    get("/:store/*path", Image, :get)
   end
 end

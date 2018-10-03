@@ -5,7 +5,7 @@ defmodule ImagerWeb.Controllers.ImageTest do
     Application.put_env(:imager, :stores, %{
       "test" => %{
         store: {Imager.Store.Dummy, dir: "test/fixtures/"},
-        cache: {Imager.Store.Dummy, dir: "test/fixtures/"},
+        cache: {Imager.Store.Dummy, dir: "test/fixtures/"}
       }
     })
   end

@@ -1,6 +1,8 @@
 defmodule Imager.Store.S3 do
   @behaviour Imager.Store
 
+  alias ExAws.S3
+
   @moduledoc """
   S3 compatible storage. It will try to stream files as much as possible
   in both ways.
@@ -30,7 +32,7 @@ defmodule Imager.Store.S3 do
       fn ->
         %{body: body} =
           bucket
-          |> ExAws.S3.initiate_multipart_upload(path, content_type: mime)
+          |> S3.initiate_multipart_upload(path, content_type: mime)
           |> ExAws.request!(config)
 
         {body.upload_id, 1, [], <<>>}
@@ -44,7 +46,7 @@ defmodule Imager.Store.S3 do
         if byte_size(chunk) > 5 * 1024 * 1024 do
           %{headers: headers} =
             bucket
-            |> ExAws.S3.upload_part(path, id, idx, chunk)
+            |> S3.upload_part(path, id, idx, chunk)
             |> ExAws.request!(config)
 
           etag = header_find(headers, "Etag")
@@ -59,7 +61,7 @@ defmodule Imager.Store.S3 do
         # 5Mi, so now we upload last chunk
         %{headers: headers} =
           bucket
-          |> ExAws.S3.upload_part(path, id, idx, data)
+          |> S3.upload_part(path, id, idx, data)
           |> ExAws.request!(config)
 
         etag = header_find(headers, "Etag")
@@ -88,7 +90,7 @@ defmodule Imager.Store.S3 do
   defp get_chunk(bucket, path, {start_byte, end_byte}, config) do
     %{body: body} =
       bucket
-      |> ExAws.S3.get_object(path, range: "bytes=#{start_byte}-#{end_byte}")
+      |> S3.get_object(path, range: "bytes=#{start_byte}-#{end_byte}")
       |> ExAws.request!(config)
 
     body
@@ -97,7 +99,7 @@ defmodule Imager.Store.S3 do
   defp get_file_size(bucket, path, config) do
     with {:ok, %{headers: headers}} <-
            bucket
-           |> ExAws.S3.head_object(path)
+           |> S3.head_object(path)
            |> ExAws.request(config),
          value when not is_nil(value) <-
            header_find(headers, "Content-Length"),
