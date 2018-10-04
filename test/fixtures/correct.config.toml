@@ -1,2 +1,4 @@
 [stores.test]
 type = "Blackhole"
+    [stores.test.options]
+    foo = "bar"

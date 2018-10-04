@@ -69,7 +69,8 @@ defmodule Imager.Mixfile do
       {:junit_formatter, "~> 2.2", only: [:test]},
       {:excoveralls, "~> 0.10", only: [:test]},
       {:stream_data, "~> 0.1", only: [:test]},
-      {:temp, "~> 0.4", only: [:test]}
+      {:temp, "~> 0.4", only: [:test]},
+      {:bypass, "~> 0.9", only: [:test]}
     ]
   end
 

@@ -36,7 +36,6 @@ defmodule Imager.Config do
     :ok
   end
 
-  defp deep_merge(nil, b), do: b
   defp deep_merge(a, b), do: deep_merge(nil, a, b)
 
   defp deep_merge(_k, a, b) when is_list(a) and is_list(b) do

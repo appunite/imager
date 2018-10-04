@@ -14,5 +14,15 @@ config :junit_formatter,
   report_file: "report.xml",
   report_dir: "reports/exunit"
 
+config :ex_aws,
+  access_key_id: "SampleKeyId",
+  secret_access_key: "SampleSecretKeyId",
+  s3: [
+    host: "localhost",
+    scheme: "http://",
+    bucket: "test"
+  ],
+  retries: [max_attempts: 1]
+
 # Print only warnings and errors during test
 config :logger, level: :warn
