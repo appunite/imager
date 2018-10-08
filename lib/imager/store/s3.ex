@@ -12,7 +12,7 @@ defmodule Imager.Store.S3 do
 
   def retrieve(path, opts) do
     {bucket, config} = Keyword.pop(opts, :bucket)
-    {chunk_size, config} = Keyword.pop(config, :chunk_size, 1024 * 1024)
+    {chunk_size, config} = Keyword.pop(config, :chunk_size, 2 * 1024)
 
     with {:ok, size, mime} <- get_file_size(bucket, path, config) do
       stream =

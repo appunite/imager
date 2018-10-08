@@ -6,6 +6,7 @@ defmodule ImagerWeb.Controllers.Image do
   """
 
   import Plug.Conn
+  import Mockery.Macro
 
   require Logger
 
@@ -21,12 +22,12 @@ defmodule ImagerWeb.Controllers.Image do
 
     Logger.metadata(path: path, commands: inspect(commands))
 
-    with {:ok, store} <- Imager.store(store),
-         {:ok, {size, mime, stream}} <- Imager.process(store, path, commands) do
+    with {:ok, store} <- imager().store(store),
+         {:ok, {size, mime, stream}} <- imager().process(store, path, commands) do
       conn =
         conn
-        |> put_resp_content_type(mime)
-        |> put_resp_content_size(size)
+        |> put_resp_content_type(mime, nil)
+        |> put_resp_content_length(size)
         |> send_chunked(200)
 
       Enum.reduce_while(stream, conn, fn chunk, conn ->
@@ -46,8 +47,10 @@ defmodule ImagerWeb.Controllers.Image do
 
   def get(conn, _), do: send_resp(conn, 404, "")
 
-  defp put_resp_content_size(conn, :unknown), do: conn
+  defp imager, do: mockable(Imager)
 
-  defp put_resp_content_size(conn, size) when is_integer(size),
-    do: put_resp_header(conn, "content-size", Integer.to_string(size))
+  defp put_resp_content_length(conn, :unknown), do: conn
+
+  defp put_resp_content_length(conn, size) when is_integer(size),
+    do: put_resp_header(conn, "content-length", Integer.to_string(size))
 end

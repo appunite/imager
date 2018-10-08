@@ -5,7 +5,8 @@ defmodule Imager.Application do
 
   def start(_type, _args) do
     children = [
-      ImagerWeb.Endpoint
+      ImagerWeb.Endpoint,
+      {DynamicSupervisor, name: Imager.Workers, strategy: :one_for_one}
     ]
 
     Application.put_env(
