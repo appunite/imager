@@ -5,8 +5,9 @@ defmodule Imager.Application do
 
   def start(_type, _args) do
     children = [
-      ImagerWeb.Endpoint,
-      {DynamicSupervisor, name: Imager.Workers, strategy: :one_for_one}
+      exec_app(),
+      {DynamicSupervisor, name: Imager.Workers, strategy: :one_for_one},
+      ImagerWeb.Endpoint
     ]
 
     Application.put_env(
@@ -26,5 +27,17 @@ defmodule Imager.Application do
     ImagerWeb.Endpoint.config_change(changed, removed)
 
     :ok
+  end
+
+  defp exec_app do
+    opts =
+      with {:ok, name} when not is_nil(name) <-
+             Application.fetch_env(:imager, :user) do
+        [user: String.to_charlist(name)]
+      else
+        _ -> []
+      end
+
+    %{id: :exec_app, start: {:exec, :start_link, [opts]}}
   end
 end

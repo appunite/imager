@@ -36,7 +36,7 @@ defmodule Imager.Mixfile do
     [
       mod: {Imager.Application, []},
       extra_applications: [:logger, :inets, :runtime_tools],
-      included_applications: [:vmstats]
+      included_applications: [:vmstats, :erlexec]
     ]
   end
 
@@ -62,7 +62,7 @@ defmodule Imager.Mixfile do
       {:vmstats, "~> 2.2", runtime: false},
       {:sentry, "~> 7.0"},
       {:porcelain, "~> 2.0.3"},
-      {:erlexec, "~> 1.9"},
+      {:erlexec, "~> 1.9", runtime: false},
       {:jose, "~> 1.8"},
       {:toml, "~> 0.3"},
       {:mockery, "~> 2.2.0"},
