@@ -4,7 +4,7 @@ defmodule Imager.Store do
   in application.
   """
 
-  alias Imager.Stats
+  alias Imager.Instrumenter
 
   @type size :: non_neg_integer()
   @type stream :: Enumerable.t()
@@ -31,13 +31,9 @@ defmodule Imager.Store do
   @spec retrieve(store, binary, keyword) ::
           {:ok, {size, mime, stream}} | :error
   def retrieve({store, glob_opts}, path, options) do
-    Stats.increment(
-      "imager.store.retrieve",
-      1,
-      Stats.tags(~w(module:#{store}))
-    )
-
-    store.retrieve(path, Keyword.merge(glob_opts, options))
+    with {:ok, {size, mime, stream}} <-
+           store.retrieve(path, Keyword.merge(glob_opts, options)),
+         do: {:ok, {size, mime, Instrumenter.Storage.retrieved(stream, store)}}
   end
 
   @doc """
@@ -45,7 +41,8 @@ defmodule Imager.Store do
   """
   @spec store(stream, store, mime, binary, keyword) :: stream
   def store(stream, {store, glob_opts}, mime, path, options) do
-    Stats.increment("imager.store.store", 1, Stats.tags(~w(module:#{store})))
-    store.store(path, mime, stream, Keyword.merge(glob_opts, options))
+    path
+    |> store.store(mime, stream, Keyword.merge(glob_opts, options))
+    |> Instrumenter.Storage.saved(store)
   end
 end

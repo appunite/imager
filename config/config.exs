@@ -9,7 +9,7 @@ use Mix.Config
 config :imager, ImagerWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: ImagerWeb.Views.Error, accepts: ~w(json)],
-  instrumenters: [ImagerWeb.Instrumenter]
+  instrumenters: [Prometheus.PhoenixInstrumenter]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -20,10 +20,6 @@ config :phoenix, :format_encoders, json: Jason
 
 config :ex_aws,
   json_codec: Jason
-
-config :vmstats,
-  sink: Imager.Stats,
-  base_key: "erlang"
 
 config :sentry,
   included_environments: [:prod],

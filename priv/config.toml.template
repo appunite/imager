@@ -8,11 +8,6 @@
 #
 # Sentry DSN key used to report errors
 # sentry_dsn = ""
-#
-# StatsD configuration
-# [stats]
-#       host = "localhost" # host send stats to
-#       port = 8125 # UDP port to send stats to
 
 # # Store definition
 #

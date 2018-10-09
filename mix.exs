@@ -17,7 +17,7 @@ defmodule Imager.Mixfile do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      dialyzer: [plt_add_apps: [:vmstats, :erlexec]],
+      dialyzer: [plt_add_apps: [:erlexec]],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -36,7 +36,7 @@ defmodule Imager.Mixfile do
     [
       mod: {Imager.Application, []},
       extra_applications: [:logger, :inets, :runtime_tools],
-      included_applications: [:vmstats, :erlexec]
+      included_applications: [:erlexec]
     ]
   end
 
@@ -53,13 +53,17 @@ defmodule Imager.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:cowboy, "~> 1.0"},
       {:distillery, "~> 2.0"},
-      {:statix, ">= 0.0.0"},
+      {:prometheus, "~> 4.1"},
+      {:prometheus_phoenix, "~> 1.2.0"},
+      {:prometheus_process_collector,
+       github: "deadtrickster/prometheus_process_collector",
+       override: true,
+       manager: :rebar3},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.6"},
       {:jason, ">= 0.0.0"},
-      {:vmstats, "~> 2.2", runtime: false},
       {:sentry, "~> 7.0"},
       {:erlexec, "~> 1.9", runtime: false},
       {:jose, "~> 1.8"},
