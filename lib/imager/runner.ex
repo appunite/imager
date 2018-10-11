@@ -36,6 +36,7 @@ defmodule Imager.Runner do
 
     receive do
       {:DOWN, ^ref, :process, ^pid, :normal} -> :ok
+      {:DOWN, ^ref, :process, ^pid, :noproc} -> :ok
       {:DOWN, ^ref, :process, ^pid, _} -> :error
     end
   end
