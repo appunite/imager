@@ -7,7 +7,6 @@ defmodule Imager.Config.StoreTransform do
 
   require Logger
 
-  @reserved ~w[health]
   @types ~w[S3 Local Blackhole]
 
   def transform(:stores, entries) do
@@ -16,7 +15,8 @@ defmodule Imager.Config.StoreTransform do
            {:ok, cache} <- get_cache(values) do
         path = to_string(path)
 
-        if path in @reserved, do: raise("'#{path}' is reserved name")
+        if String.starts_with?(path, "_"),
+          do: raise("'#{path}' cannot start with underscore")
 
         if String.contains?(path, "/"),
           do: raise("'#{path}' cannot contain '/'")

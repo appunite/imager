@@ -19,11 +19,11 @@ defmodule ImagerWeb.Plug.MetricsExporterTest do
   end
 
   property "non-metric endpoints are passed through" do
-    opts = Subject.init(endpoint: "/metric")
+    opts = Subject.init([])
 
     check all path <- path(),
               method <- http_method(),
-              path != "/metric" do
+              path != "/__metrics" do
       conn = conn(method, path)
 
       assert conn == Subject.call(conn, opts)
@@ -31,8 +31,8 @@ defmodule ImagerWeb.Plug.MetricsExporterTest do
   end
 
   test "metric endpoint return 200" do
-    opts = Subject.init(endpoint: "/metric")
-    conn = conn(:get, "/metric")
+    opts = Subject.init([])
+    conn = conn(:get, "/__metrics")
 
     assert {200, _, _} = sent_resp(Subject.call(conn, opts))
   end
