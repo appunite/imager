@@ -74,5 +74,6 @@ defmodule Imager.Tool do
   defp string({"gravity", orientation}), do: {:gravity, orientation}
   defp string({"strip", _}), do: {:strip, true}
   defp string({"thumbnail", size}), do: {:thumbnail, size}
+  defp string({"format", format}), do: {:format, format}
   defp string(option), do: raise(UnknownOption, option)
 end

@@ -12,18 +12,15 @@ defmodule Imager.Runner do
         {__MODULE__, pid: self(), cmd: cmd, args: args}
       )
 
+    ref = Process.monitor(pid)
+
     stream =
       Stream.resource(
         fn -> pid end,
         fn pid ->
           receive do
-            {:out, ^pid, data} ->
-              {[data], pid}
-
-            {:exit, ^pid, status} = msg ->
-              send(self(), msg)
-
-              {:halt, status}
+            {:out, ^pid, data} -> {[data], pid}
+            {:DOWN, ^ref, :process, ^pid, status} -> {:halt, status}
           end
         end,
         fn _ -> nil end
@@ -35,9 +32,11 @@ defmodule Imager.Runner do
   def start_link(args), do: GenServer.start_link(__MODULE__, args)
 
   def wait(pid) do
+    ref = Process.monitor(pid)
+
     receive do
-      {:exit, ^pid, :success} -> :ok
-      {:exit, ^pid, _} -> :error
+      {:DOWN, ^ref, :process, ^pid, :normal} -> :ok
+      {:DOWN, ^ref, :process, ^pid, _} -> :error
     end
   end
 
@@ -90,16 +89,6 @@ defmodule Imager.Runner do
         {:DOWN, ospid, :process, pid, result},
         %__MODULE__{pid: pid, ospid: ospid} = state
       ) do
-    handle_result(result, state)
-
-    {:stop, :normal, state}
-  end
-
-  defp handle_result(:normal, %__MODULE__{output: output}),
-    do: send(output, {:exit, self(), :success})
-
-  defp handle_result({:exit_status, status}, %__MODULE__{output: output}) do
-    Logger.warn(inspect(:exec.status(status)))
-    send(output, {:exit, self(), :failure})
+    {:stop, result, state}
   end
 end
