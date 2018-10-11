@@ -30,7 +30,7 @@ defmodule Imager.Store.Local do
     dir = Keyword.get(opts, :dir, ".")
     full_path = Path.join(dir, path)
 
-    :ok = File.mkdir_p!(dir)
+    :ok = full_path |> Path.dirname() |> File.mkdir_p!()
 
     {:ok, file} = :file.open(full_path, [:write, :raw])
 
