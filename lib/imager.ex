@@ -59,6 +59,7 @@ defmodule Imager do
           {:ok, {:unknown, mime, stream}}
 
         _ ->
+          Logger.error("Processing image failed")
           Instrumenter.Processing.failed(store)
 
           :failed

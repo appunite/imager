@@ -24,16 +24,6 @@ defmodule Imager.RunnerTest do
     assert_receive {:out, ^pid, "foo"}
   end
 
-  test "returns success on exit" do
-    assert {:ok, pid} = run("true")
-    assert_receive {:exit, ^pid, :success}
-  end
-
-  test "returns failure on exit" do
-    assert {:ok, pid} = run("false")
-    assert_receive {:exit, ^pid, :failure}
-  end
-
   defp run(command, args \\ []),
     do: start_supervised({Subject, pid: self(), cmd: command, args: args})
 end
