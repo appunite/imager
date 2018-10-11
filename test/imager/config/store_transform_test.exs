@@ -13,6 +13,7 @@ defmodule Imager.Config.StoreTransformTest do
 
   property "returns map with stringified atoms" do
     check all path <- atom(:alphanumeric),
+              not String.starts_with?("#{path}", "_"),
               config <- store_config() do
       assert Map.has_key?(
                Subject.transform(:stores, %{path => config}),
@@ -73,9 +74,15 @@ defmodule Imager.Config.StoreTransformTest do
     end
   end
 
-  test "raises when uses reserved name" do
-    assert_raise RuntimeError, "'health' is reserved name", fn ->
-      Subject.transform(:stores, %{health: %{type: "Blackhole"}})
+  property "raises when uses reserved name" do
+    check all name <- string(:alphanumeric) do
+      assert_raise RuntimeError,
+                   "'_#{name}' cannot start with underscore",
+                   fn ->
+                     Subject.transform(:stores, %{
+                       :"_#{name}" => %{type: "Blackhole"}
+                     })
+                   end
     end
   end
 

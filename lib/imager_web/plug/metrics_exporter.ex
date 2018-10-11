@@ -25,13 +25,10 @@ defmodule ImagerWeb.Plug.MetricsExporter do
     opts =
       opts
       |> Keyword.merge(Application.get_env(:imager, :prometheus, []))
-      |> Keyword.put_new(:endpoint, "/metrics")
       |> Keyword.update(:format, :prometheus_text_format, &parse_format/1)
 
-    endpoint = Keyword.fetch!(opts, :endpoint)
-
     case conn.request_path do
-      ^endpoint -> send_stats(conn, opts)
+      "/__metrics" -> send_stats(conn, opts)
       _ -> conn
     end
   end

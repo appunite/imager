@@ -12,7 +12,7 @@ defmodule ImagerWeb.Router do
   scope "/", ImagerWeb.Controllers do
     pipe_through(:api)
 
-    get("/health", Health, :get)
+    get("/__health", Health, :get)
 
     get("/:store/*path", Image, :get)
   end
