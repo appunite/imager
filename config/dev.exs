@@ -20,7 +20,7 @@ config :logger, :console, format: "[$level] $message\n"
 config :imager, :stores, %{
   "local" => %{
     store: {Imager.Store.Local, dir: "test/fixtures/"},
-    cache: {Imager.Store.Local, dir: "tmp/cache/"}
+    cache: {Imager.Store.Blackhole, []}
   }
 }
 

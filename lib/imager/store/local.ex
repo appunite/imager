@@ -20,7 +20,7 @@ defmodule Imager.Store.Local do
     mime = MIME.type(extname)
 
     with {:ok, %File.Stat{size: size}} <- File.stat(full_path) do
-      {:ok, {size, mime, File.stream!(full_path, [], 1024 * 1024)}}
+      {:ok, {size, mime, File.stream!(full_path, [], 2 * 1024)}}
     else
       _ -> :error
     end

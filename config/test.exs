@@ -6,6 +6,8 @@ config :imager, ImagerWeb.Endpoint,
   server: false,
   instrumenters: []
 
+config :imager, :user, System.get_env("IMAGER_USER")
+
 config :imager, :port, 4001
 
 config :logger, :console, format: "[$level] $message\n"

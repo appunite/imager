@@ -17,7 +17,7 @@ defmodule Imager.Mixfile do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      dialyzer: [plt_add_apps: [:vmstats]],
+      dialyzer: [plt_add_apps: [:vmstats, :erlexec]],
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -36,7 +36,7 @@ defmodule Imager.Mixfile do
     [
       mod: {Imager.Application, []},
       extra_applications: [:logger, :inets, :runtime_tools],
-      included_applications: [:vmstats]
+      included_applications: [:vmstats, :erlexec]
     ]
   end
 
@@ -61,9 +61,10 @@ defmodule Imager.Mixfile do
       {:jason, ">= 0.0.0"},
       {:vmstats, "~> 2.2", runtime: false},
       {:sentry, "~> 7.0"},
-      {:porcelain, "~> 2.0.3"},
+      {:erlexec, "~> 1.9", runtime: false},
       {:jose, "~> 1.8"},
       {:toml, "~> 0.3"},
+      {:mockery, "~> 2.2.0"},
       {:credo, ">= 0.0.0", only: [:dev], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
       {:junit_formatter, "~> 2.2", only: [:test]},

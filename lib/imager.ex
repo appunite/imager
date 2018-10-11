@@ -7,6 +7,8 @@ defmodule Imager do
   if it comes from the database, an external API or others.
   """
 
+  import Mockery.Macro
+
   require Logger
 
   alias Imager.Stats
@@ -38,32 +40,29 @@ defmodule Imager do
     ))
 
     Logger.metadata(input: file_name, commands: inspect(commands))
+    Logger.debug(inspect(args))
 
     with :error <- Store.retrieve(cache, result_name, opts),
-         {:ok, {_, _, stream}} <- Store.retrieve(store, file_name, opts) do
+         {:ok, {_, _, in_stream}} <- Store.retrieve(store, file_name, opts) do
       Logger.debug("Start processing")
       Stats.increment("imager.process.started", 1, tags: tags)
 
-      process =
-        Porcelain.spawn(executable(), args,
-          in: stream,
-          out: :stream,
-          err: :string
-        )
+      {pid, out_stream} = runner().stream(executable(), args)
 
-      case Porcelain.Process.await(process) do
-        {:ok, %{status: 0}} ->
+      runner().feed_stream(pid, in_stream)
+
+      case runner().wait(pid) do
+        :ok ->
           Stats.increment("imager.process.succeeded", 1, tags: tags)
 
           stream =
-            process.out
+            out_stream
             |> Store.store(cache, mime, result_name, opts)
 
           {:ok, {:unknown, mime, stream}}
 
         _ ->
           Stats.increment("imager.process.failed", 1, tags: tags)
-          Logger.error(process.err)
 
           :failed
       end
@@ -90,6 +89,8 @@ defmodule Imager do
       result
     end
   end
+
+  defp runner, do: mockable(Imager.Runner)
 
   defp executable, do: Application.get_env(:imager, :executable, "convert")
 end
