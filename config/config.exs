@@ -5,6 +5,8 @@
 # is restricted to this project.
 use Mix.Config
 
+config :phoenix, :plug_init_mode, :runtime
+
 # Configures the endpoint
 config :imager, ImagerWeb.Endpoint,
   url: [host: "localhost"],
@@ -22,7 +24,7 @@ config :ex_aws,
   json_codec: Jason
 
 config :sentry,
-  included_environments: [:prod],
+  included_environments: [],
   release: Mix.Project.config()[:version],
   environment_name: Mix.env()
 

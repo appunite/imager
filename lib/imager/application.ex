@@ -10,13 +10,13 @@ defmodule Imager.Application do
       ImagerWeb.Endpoint
     ]
 
-    Application.put_env(
-      :sentry,
-      :dsn,
-      Application.get_env(:imager, :sentry_dsn)
-    )
+    if dsn = Application.get_env(:imager, :sentry_dsn) do
+      Application.put_env(:sentry, :dsn, dsn)
+      Application.put_env(:sentry, :included_environments, [:prod])
+    end
 
     {:ok, _} = Logger.add_backend(Sentry.LoggerBackend)
+    _ = Application.ensure_all_started(:sentry)
 
     prometheus()
 
@@ -31,9 +31,11 @@ defmodule Imager.Application do
   end
 
   defp exec_app do
+    default = if System.get_pid() == "1", do: "nobody"
+
     opts =
-      with {:ok, name} when not is_nil(name) <-
-             Application.fetch_env(:imager, :user) do
+      with name when not is_nil(name) <-
+             Application.get_env(:imager, :user, default) do
         [user: String.to_charlist(name)]
       else
         _ -> []
