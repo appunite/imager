@@ -2,6 +2,9 @@ defmodule ImagerWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :imager
   use Sentry.Phoenix.Endpoint
 
+  plug(ImagerWeb.Plug.PipelineInstrumenter)
+  plug(ImagerWeb.Plug.MetricsExporter)
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
@@ -27,6 +30,9 @@ defmodule ImagerWeb.Endpoint do
   configuration should be loaded from the system environment.
   """
   def init(_key, config) do
+    ImagerWeb.Plug.PipelineInstrumenter.setup()
+    ImagerWeb.Plug.MetricsExporter.setup()
+
     port =
       System.get_env("PORT") || Application.get_env(:imager, :port) ||
         raise "expected the PORT environment variable to be set"

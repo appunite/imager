@@ -11,7 +11,7 @@ defmodule Imager do
 
   require Logger
 
-  alias Imager.Stats
+  alias Imager.Instrumenter
   alias Imager.Store
   alias Imager.Tool
 
@@ -26,7 +26,7 @@ defmodule Imager do
   def process(store, file_name, commands, opts \\ [])
 
   def process(%{store: store}, file_name, [], opts) do
-    Stats.increment("imager.passthrough", 1, tags: Stats.tags())
+    Instrumenter.Cache.passthrough(store)
 
     Store.retrieve(store, file_name, opts)
   end
@@ -34,10 +34,8 @@ defmodule Imager do
   def process(%{store: store, cache: cache}, file_name, commands, opts) do
     {mime, result_name} = Tool.result(file_name, commands)
     args = Tool.build_command(commands)
-    tags = Stats.tags(~w(
-      store:#{elem(store, 0)}
-      cache:#{elem(cache, 0)}
-    ))
+
+    Instrumenter.Processing.command(commands)
 
     Logger.metadata(input: file_name, commands: inspect(commands))
     Logger.debug(inspect(args))
@@ -45,7 +43,6 @@ defmodule Imager do
     with :error <- Store.retrieve(cache, result_name, opts),
          {:ok, {_, _, in_stream}} <- Store.retrieve(store, file_name, opts) do
       Logger.debug("Start processing")
-      Stats.increment("imager.process.started", 1, tags: tags)
 
       {pid, out_stream} = runner().stream(executable(), args)
 
@@ -53,7 +50,7 @@ defmodule Imager do
 
       case runner().wait(pid) do
         :ok ->
-          Stats.increment("imager.process.succeeded", 1, tags: tags)
+          Instrumenter.Processing.succeeded(store)
 
           stream =
             out_stream
@@ -62,14 +59,14 @@ defmodule Imager do
           {:ok, {:unknown, mime, stream}}
 
         _ ->
-          Stats.increment("imager.process.failed", 1, tags: tags)
+          Instrumenter.Processing.failed(store)
 
           :failed
       end
     else
       {:ok, {_, _, _}} = result ->
         Logger.debug("Cache hit")
-        Stats.increment("imager.process.cache_hit", 1, tags: tags)
+        Instrumenter.Cache.cache_hit(cache)
 
         result
 

@@ -6,8 +6,10 @@ defmodule ImagerWeb.Controllers.Health do
   def get(conn, _params) do
     json(conn, %{
       status: "pass",
-      version: Imager.Stats.version(),
+      version: version(),
       description: @description
     })
   end
+
+  defp version, do: Application.spec(:imager, :vsn) |> List.to_string()
 end
