@@ -43,14 +43,47 @@ only ImageMagick.
 
 ## Installation
 
-TBD
+### Docker
+
+Currently the only officially supported installation way is via official Docker
+image that can be found on [Docker Hub][hub].
+
+1. First we need to generate configuration file for Imager
+
+  ```
+  $ docker run --rm appunite/imager:latest config > config.toml
+  ```
+
+1. Edit `config.toml`.  Documentation is available within the file itself.
+1. Run container providing configuration.
+
+  ```
+  $ docker run --rm -v './config.toml:/etc/imager/config.toml:ro' -p 8080:80 appunite/imager:latest
+  ```
 
 ## Usage
 
-TBD
+Assuming that you have store named `local` and there is file named `lenna.png`
+you can access this file directly via on <http://localhost:8080/local/lenna.png>,
+to generate thumbnail of size `50x50` pixels you can then use
+<http://localhost:8080/local/lenna.png?thumbnail=50x50>.
+
+Currently available options are:
+
+- `thumbnail=<size>`
+- `strip`
+- `gravity=<gravity>`
+- `extent=<size>`
+- `flatten`
+- `background=<colour>`
+- `format=<format>`
+
+Which maps 1:1 to their respective [ImageMagick flags][im-flags].
 
 ## License
 
 See [LICENSE](LICENSE) file.
 
+[im-flags]: https://imagemagick.org/script/command-line-processing.php#option
 [DICOM]: https://en.wikipedia.org/wiki/DICOM "DICOM - Wikipedia"
+[hub]: https://hub.docker.com/r/appunite/imager/ "appunite/imager - Docker Hub"

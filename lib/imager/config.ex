@@ -26,6 +26,9 @@ defmodule Imager.Config do
     end
   end
 
+  def example,
+    do: IO.puts(File.read!(Path.join(:code.priv_dir(:imager), "config.toml")))
+
   defp persist(map) when is_map(map) do
     for {key, values} <- map do
       values = deep_merge(Application.get_env(:imager, key), values)

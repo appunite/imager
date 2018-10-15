@@ -13,6 +13,9 @@ use Mix.Releases.Config,
     default_environment: Mix.env()
 
 environment :prod do
+  set commands: [
+    config: "rel/commands/config.sh"
+  ]
   set include_erts: true
   set include_src: false
   set cookie: :"1u[<S!I(rduF/Rzy8)&A<,$D{;y:&av9?V],2S/37FKidw5JKpq|j17^D2Gz]N=m"
@@ -20,9 +23,6 @@ environment :prod do
     {Imager.Config, path: "/etc/imager/config.toml"},
     {Imager.Config, path: "${RELEASE_ROOT_DIR}/etc/imager/config.toml"},
     {Imager.Config, path: "${IMAGER_CONFIG}"},
-  ]
-  set overlays: [
-    {:copy, "priv/config.toml.template", "etc/imager/config.toml"}
   ]
 end
 
