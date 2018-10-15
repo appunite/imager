@@ -1,6 +1,6 @@
 # # General configuration
 #
-# Port to listen on
+# Port to listen on (do not use in Docker installations)
 # port = "$PORT"
 #
 # Key used to sign tokens used to verify requests.
@@ -14,7 +14,7 @@
 # Each store is defined in form
 #
 #       [stores.<path>]
-#       type = "S3" or "Local" # case sensitive
+#       type = "Local" # case sensitive
 #
 # Each store can also be provided with additional options in form
 #
@@ -42,8 +42,10 @@
 # There is no way to cast given variable to different type
 
 # # Store types
-#
+
 # ## S3
+#
+# Store that uses S3-compatible service as a remote store.
 #
 # Available options:
 # `bucket` (required) - bucket name for given storage
@@ -63,3 +65,25 @@
 #     scheme = "$S3_SCHEME"
 #     port = "$S3_PORT"
 #     region = "eu-west-1"
+
+# ## Local
+#
+# Store that uses local directory.
+#
+# Available options:
+# `dir` (required) - directory where images are/will be stored
+
+# [stores.local]
+# type = "Local"
+#     [stores.local.options]
+#     dir = "/var/imager"
+
+# ## Blackhole
+#
+# Store that discards all writes and always fail on read.
+#
+# Can be useful when using CDN and we do not want to store images at all and
+# rely on extrnal caching system.
+
+# [stores.dump]
+# type = "Blackhole"

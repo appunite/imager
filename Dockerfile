@@ -21,10 +21,13 @@ RUN apk add --update \
     && rm -rf /var/cache/apk/*
 ENV MIX_ENV prod
 ENV OPTIMIZE true
-COPY . /app
+RUN mkdir /app
+COPY mix.exs /app
+COPY mix.lock /app
 WORKDIR /app
 RUN mix do local.hex --force, local.rebar --force
 RUN mix do deps.get, deps.compile
+COPY . /app
 RUN mix do compile, release --env=prod
 
 FROM source
