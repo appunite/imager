@@ -1,3 +1,18 @@
+<a name="0.3.3"></a>
+## 0.3.3 (2018-11-24)
+
+
+#### Documentation
+
+*   document installation and configuration ([38f3c37f](https://github.com/appunite/imager/commit/38f3c37f851299030c47acf1aaea64ad1e09b815))
+
+#### Bug Fixes
+
+*   typo in Dockerfile ([bb6f5a4e](https://github.com/appunite/imager/commit/bb6f5a4ea6a0d9d9f4128348dc4ecc2865b97b92))
+* **Dockerfile:**  use tini as a PID 1 process in container ([daffe313](https://github.com/appunite/imager/commit/daffe3136d430c0b89427662986755e89a4ba7ef))
+
+
+
 <a name="0.3.2"></a>
 ## 0.3.2 (2018-11-24)
 
