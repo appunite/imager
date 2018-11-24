@@ -9,6 +9,7 @@ RUN apk add --no-cache --update \
     tini
 ENV LANG C.UTF-8
 ENV PORT 80
+ENV IMAGER_USER nobody
 HEALTHCHECK --timeout=5s --interval=10s CMD imager ping
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/imager"]
 CMD ["foreground"]

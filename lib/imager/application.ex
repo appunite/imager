@@ -31,14 +31,13 @@ defmodule Imager.Application do
   end
 
   defp exec_app do
-    default = if System.get_pid() == "1", do: "nobody"
+    default = System.get_env("IMAGER_USER")
 
     opts =
-      with name when not is_nil(name) <-
-             Application.get_env(:imager, :user, default) do
-        [user: String.to_charlist(name)]
+      with nil <- Application.get_env(:imager, :user, default) do
+        []
       else
-        _ -> []
+        name -> [user: String.to_charlist(name)]
       end
 
     %{id: :exec_app, start: {:exec, :start_link, [opts]}}
