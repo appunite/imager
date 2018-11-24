@@ -6,7 +6,7 @@ RUN apk add --no-cache --update \
     libcap \
     openssl \
     sudo \
-    tini \
+    tini
 ENV LANG C.UTF-8
 ENV PORT 80
 HEALTHCHECK --timeout=5s --interval=10s CMD imager ping
