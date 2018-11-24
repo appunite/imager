@@ -1,16 +1,16 @@
 FROM alpine:latest AS source
-RUN apk add --update \
+RUN apk add --no-cache --update \
     bash \
     ghostscript \
     imagemagick \
     libcap \
     openssl \
     sudo \
-    && rm -rf /var/cache/apk/*
+    tini \
 ENV LANG C.UTF-8
 ENV PORT 80
 HEALTHCHECK --timeout=5s --interval=10s CMD imager ping
-ENTRYPOINT ["/usr/local/bin/imager"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/imager"]
 CMD ["foreground"]
 
 FROM elixir:1.7.3-alpine AS build
