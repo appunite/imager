@@ -7,7 +7,10 @@ defmodule ImagerWeb.Controllers.Health do
     json(conn, %{
       status: "pass",
       version: version(),
-      description: @description
+      description: @description,
+      meta: %{
+        stores: Imager.stores()
+      }
     })
   end
 

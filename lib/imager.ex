@@ -88,6 +88,14 @@ defmodule Imager do
     end
   end
 
+  def stores do
+    with {:ok, stores} <- Application.fetch_env(:imager, :stores) do
+      Map.keys(stores)
+    else
+      _ -> []
+    end
+  end
+
   defp runner, do: mockable(Imager.Runner)
 
   defp executable, do: Application.get_env(:imager, :executable, "convert")
