@@ -20,6 +20,8 @@ defmodule Imager.Application do
 
     prometheus()
 
+    JOSE.json_module(Imager.JOSE.Jason)
+
     opts = [strategy: :one_for_one, name: Imager.Supervisor]
     Supervisor.start_link(children, opts)
   end

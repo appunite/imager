@@ -6,6 +6,7 @@
 use Mix.Config
 
 config :phoenix, :plug_init_mode, :runtime
+config :phoenix, :json_library, Jason
 
 # Configures the endpoint
 config :imager, ImagerWeb.Endpoint,

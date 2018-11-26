@@ -49,16 +49,14 @@ defmodule Imager.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.2"},
+      {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
-      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.7"},
       {:distillery, "~> 2.0"},
       {:prometheus, "~> 4.1"},
       {:prometheus_phoenix, "~> 1.2.0"},
-      {:prometheus_process_collector,
-       github: "deadtrickster/prometheus_process_collector",
-       override: true,
-       manager: :rebar3},
+      {:prometheus_process_collector, "~> 1.4.0"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
@@ -68,14 +66,14 @@ defmodule Imager.Mixfile do
       {:erlexec, "~> 1.9", runtime: false},
       {:jose, "~> 1.8"},
       {:toml, "~> 0.3"},
-      {:mockery, "~> 2.2.0"},
+      {:mockery, "~> 2.2"},
       {:credo, ">= 0.0.0", only: [:dev], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
-      {:junit_formatter, "~> 2.2", only: [:test]},
+      {:junit_formatter, "~> 3.0", only: [:test]},
       {:excoveralls, "~> 0.10", only: [:test]},
       {:stream_data, "~> 0.1", only: [:test]},
       {:temp, "~> 0.4", only: [:test]},
-      {:bypass, "~> 0.9", only: [:test]}
+      {:bypass, "~> 1.0", only: [:test]}
     ]
   end
 

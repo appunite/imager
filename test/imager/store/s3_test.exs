@@ -1,7 +1,7 @@
 defmodule Imager.Store.S3Test do
   use ExUnit.Case, async: true
 
-  import Plug.Conn, only: [resp: 3, put_resp_header: 3, get_req_header: 2]
+  import Plug.Conn
 
   alias Imager.Store.S3, as: Subject
 
@@ -39,7 +39,7 @@ defmodule Imager.Store.S3Test do
         conn
         |> put_resp_header("content-length", "123456")
         |> put_resp_header("content-type", "foo/bar")
-        |> resp(200, "")
+        |> send_chunked(200)
       end)
 
       assert {:ok, {123_456, "foo/bar", _}} =
@@ -51,7 +51,7 @@ defmodule Imager.Store.S3Test do
         conn
         |> put_resp_header("content-length", "3")
         |> put_resp_header("content-type", "foo/bar")
-        |> resp(200, "")
+        |> send_chunked(200)
       end)
 
       assert {:ok, {3, "foo/bar", stream}} =
@@ -71,7 +71,7 @@ defmodule Imager.Store.S3Test do
         conn
         |> put_resp_header("content-length", "3")
         |> put_resp_header("content-type", "foo/bar")
-        |> resp(200, "")
+        |> send_chunked(200)
       end)
 
       assert {:ok, {3, "foo/bar", stream}} =
