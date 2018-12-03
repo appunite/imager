@@ -16,6 +16,7 @@ environment :prod do
   set commands: [
     config: "rel/commands/config.sh"
   ]
+  set post_configure_hooks: "rel/hooks/post_configure"
   set include_erts: true
   set include_src: false
   set cookie: :"1u[<S!I(rduF/Rzy8)&A<,$D{;y:&av9?V],2S/37FKidw5JKpq|j17^D2Gz]N=m"

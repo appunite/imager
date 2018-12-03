@@ -18,7 +18,9 @@ defmodule Imager.Application do
     {:ok, _} = Logger.add_backend(Sentry.LoggerBackend)
     _ = Application.ensure_all_started(:sentry)
 
-    prometheus()
+    Imager.Instrumenter.setup()
+
+    JOSE.json_module(Imager.JOSE.Jason)
 
     opts = [strategy: :one_for_one, name: Imager.Supervisor]
     Supervisor.start_link(children, opts)
@@ -41,13 +43,5 @@ defmodule Imager.Application do
       end
 
     %{id: :exec_app, start: {:exec, :start_link, [opts]}}
-  end
-
-  defp prometheus do
-    :prometheus_registry.register_collector(:prometheus_process_collector)
-
-    Imager.Instrumenter.Cache.setup()
-    Imager.Instrumenter.Processing.setup()
-    Imager.Instrumenter.Storage.setup()
   end
 end

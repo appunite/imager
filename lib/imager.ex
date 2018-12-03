@@ -37,8 +37,7 @@ defmodule Imager do
 
     Instrumenter.Processing.command(commands)
 
-    Logger.metadata(input: file_name, commands: inspect(commands))
-    Logger.debug(inspect(args))
+    Logger.metadata(input: file_name)
 
     with :error <- Store.retrieve(cache, result_name, opts),
          {:ok, {_, _, in_stream}} <- Store.retrieve(store, file_name, opts) do

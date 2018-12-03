@@ -10,6 +10,8 @@ config :imager, :user, System.get_env("IMAGER_USER")
 
 config :imager, :port, 4001
 
+config :bypass, adapter: Plug.Cowboy
+
 config :logger, :console, format: "[$level] $message\n"
 
 config :junit_formatter,
