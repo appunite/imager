@@ -14,7 +14,7 @@ RUN mix do deps.get, deps.compile
 COPY . /app
 RUN mix do compile, release --env=prod
 
-FROM alpine:latest
+FROM alpine:3.9
 MAINTAINER Łukasz Jan Niemier <lukasz.niemier@appunite.com>
 RUN apk add --no-cache --update \
     build-base \
