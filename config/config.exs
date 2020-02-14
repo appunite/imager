@@ -22,6 +22,8 @@ config :logger, :console,
 config :phoenix, :format_encoders, json: Jason
 
 config :ex_aws,
+  access_key_id: "${AWS_ACCESS_KEY_ID}",
+  secret_access_key: "${AWS_SECRET_ACCESS_KEY}",
   json_codec: Jason
 
 config :sentry,
