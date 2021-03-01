@@ -17,3 +17,9 @@ config :imager, ImagerWeb.Endpoint, server: true
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :vmstats,
+  sink: Imager.Stats,
+  base_key: "erlang"
+
+config :statix, host: "${STATS_HOST}"
