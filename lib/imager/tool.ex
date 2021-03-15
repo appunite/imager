@@ -56,7 +56,7 @@ defmodule Imager.Tool do
     {format, commands} = format(commands)
     cmds = Enum.flat_map(commands, &command/1)
 
-    ["-[0]"] ++ cmds ++ [format <> ":-"]
+    ["-[0]"] ++ cmds ++ ["-quality", "40"] ++ [format <> ":-"]
   end
 
   defp command({:background, color}), do: ["-background", color]
